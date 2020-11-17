@@ -7,18 +7,28 @@ import javax.xml.bind.ValidationEvent;
 
 public class AppendImageUtil {
 
-	private static PairBean getLineNumAndColumnNum(int totalNum) {
+	private int columnCount = 5;
+
+	public AppendImageUtil(int columnCount) {
+		this.columnCount = columnCount;
+	}
+
+	public AppendImageUtil() {
+
+	}
+
+	private PairBean getLineNumAndColumnNum(int totalNum) {
 		if (totalNum <= 0) {
 			System.out.println("totalNum is illegal!");
 			return null;
 		}
 		PairBean bean = new PairBean();
-		bean.columnNum = 5;
-		bean.lineNum = totalNum % 5 == 0 ? totalNum / 5 : (totalNum / 5 + 1);
+		bean.columnNum = columnCount;
+		bean.lineNum = totalNum % columnCount == 0 ? totalNum / columnCount : (totalNum / columnCount + 1);
 		return bean;
 	}
 
-	private static <T> List<List<T>> groupData(List<T> imgs) {
+	private <T> List<List<T>> groupData(List<T> imgs) {
 		if (imgs == null || imgs.size() == 0) {
 			System.out.println("illegal params");
 			return null;
@@ -49,12 +59,8 @@ public class AppendImageUtil {
 	/**
 	 * 合并任数量的图片成一张图片
 	 *
-	 * @param isHorizontal true代表水平合并，fasle代表垂直合并
-	 * @param imgs         待合并的图片数组
-	 * @return
-	 * @throws IOException
 	 */
-	public static BufferedImage mergeImage(List<BufferedImage> imgs, int marginPxBetweenImage) throws IOException {
+	public BufferedImage mergeImage(List<BufferedImage> imgs, int marginPxBetweenImage) throws IOException {
 		if (imgs == null || imgs.isEmpty()) {
 			System.out.println("imput images is null!");
 			return null;
@@ -64,6 +70,7 @@ public class AppendImageUtil {
 			System.out.println("group list failed!");
 			return null;
 		}
+
 		// 如果每两张图片的间隔大于50，强制改成30
 		marginPxBetweenImage = (marginPxBetweenImage > 0 && marginPxBetweenImage < 50) ? marginPxBetweenImage : 30;
 
@@ -81,7 +88,8 @@ public class AppendImageUtil {
 		}
 		PairBean pairBean = getLineNumAndColumnNum(imgs.size());
 		// 按照每行的个数和总行数，再根据最宽和最高为标准，这样可以使每张图片在各自的格子里居中
-		int desWith = pairBean.columnNum * maxWidth + pairBean.columnNum * marginPxBetweenImage;
+		int realColumn = groupResult.get(0).size();
+		int desWith = realColumn * maxWidth + realColumn * marginPxBetweenImage;
 		int desHeight = pairBean.lineNum * maxHeight + pairBean.lineNum * marginPxBetweenImage;
 		BufferedImage destImage = new BufferedImage(desWith, desHeight, BufferedImage.TYPE_INT_ARGB);
 
