@@ -23,8 +23,8 @@ public class AppendImageUtil {
 			return null;
 		}
 		PairBean bean = new PairBean();
-		bean.columnNum = columnCount;
-		bean.lineNum = totalNum % columnCount == 0 ? totalNum / columnCount : (totalNum / columnCount + 1);
+		bean.second = columnCount;
+		bean.first = totalNum % columnCount == 0 ? totalNum / columnCount : (totalNum / columnCount + 1);
 		return bean;
 	}
 
@@ -33,18 +33,18 @@ public class AppendImageUtil {
 			System.out.println("illegal params");
 			return null;
 		}
-		PairBean groupInfo = getLineNumAndColumnNum(imgs.size());
+		PairBean<Integer, Integer> groupInfo = getLineNumAndColumnNum(imgs.size());
 		List<List<T>> result = new ArrayList<List<T>>();
-		for (int i = 1; i <= groupInfo.lineNum; i++) {
+		for (int i = 1; i <= groupInfo.first; i++) {
 			int startIndex = 0;
 			int endIndex = 0;
-			if (i != groupInfo.lineNum) {
+			if (i != groupInfo.first) {
 				// 非最后一组
-				startIndex = (i - 1) * groupInfo.columnNum;
-				endIndex = i * groupInfo.columnNum;
+				startIndex = (i - 1) * groupInfo.second;
+				endIndex = i * groupInfo.second;
 			} else {
 				// 最后一组
-				startIndex = (i - 1) * groupInfo.columnNum;
+				startIndex = (i - 1) * groupInfo.second;
 				endIndex = imgs.size();
 			}
 			List<T> eachGroup = new ArrayList<>();
@@ -86,11 +86,11 @@ public class AppendImageUtil {
 				maxHeight = currentHeight;
 			}
 		}
-		PairBean pairBean = getLineNumAndColumnNum(imgs.size());
+		PairBean<Integer, Integer> pairBean = getLineNumAndColumnNum(imgs.size());
 		// 按照每行的个数和总行数，再根据最宽和最高为标准，这样可以使每张图片在各自的格子里居中
 		int realColumn = groupResult.get(0).size();
 		int desWith = realColumn * maxWidth + realColumn * marginPxBetweenImage;
-		int desHeight = pairBean.lineNum * maxHeight + pairBean.lineNum * marginPxBetweenImage;
+		int desHeight = pairBean.first * maxHeight + pairBean.first * marginPxBetweenImage;
 		BufferedImage destImage = new BufferedImage(desWith, desHeight, BufferedImage.TYPE_INT_ARGB);
 
 		// 依次写入图片

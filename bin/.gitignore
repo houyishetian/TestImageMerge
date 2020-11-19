@@ -3,3 +3,5 @@
 /PairBean.class
 /TestImage.class
 /ImageCompressUtil.class
+/ThreadPoolUtil.class
+/ThreadPoolUtil$CompressImage.class

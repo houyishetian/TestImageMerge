@@ -47,10 +47,7 @@ public class FileScanUtil {
 
 	public static List<BufferedImage> parseImageFile(List<File> files, float scale) {
 		try {
-			List<BufferedImage> result = new ArrayList<>();
-			for (File item : files) {
-				result.add(ImageCompressUtil.compressImage(item, scale));
-			}
+			List<BufferedImage> result = new ThreadPoolUtil().fixThreadPool(files, scale);
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
