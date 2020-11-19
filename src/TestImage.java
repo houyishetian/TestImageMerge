@@ -33,7 +33,7 @@ public class TestImage {
 		if (allPicFiles == null || allPicFiles.size() == 0) {
 			System.out.println("合成失败，本目录下没有图片！");
 		} else {
-			List<BufferedImage> allImages = FileScanUtil.parseImageFile(allPicFiles);
+			List<BufferedImage> allImages = FileScanUtil.parseImageFile(allPicFiles, 0.5f);
 			AppendImageUtil imageUtil = new AppendImageUtil();
 			BufferedImage resultImage = imageUtil.mergeImage(allImages, 30);
 			FileScanUtil.writeImageToFile(resultImage, desFile.getAbsolutePath());
@@ -52,6 +52,11 @@ public class TestImage {
 		String outputName = scanner.next();
 		System.out.println();
 		scanner.close();
+		long current = System.currentTimeMillis();
 		generateImage(picsPath, outputName);
+		long cost = System.currentTimeMillis() - current;
+		long mill = cost % 1000;
+		long second = cost / 1000;
+		System.out.println("耗时：" + second + "." + mill + " 秒");
 	}
 }

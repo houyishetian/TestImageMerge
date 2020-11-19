@@ -45,11 +45,11 @@ public class FileScanUtil {
 		return null;
 	}
 
-	public static List<BufferedImage> parseImageFile(List<File> files) {
+	public static List<BufferedImage> parseImageFile(List<File> files, float scale) {
 		try {
 			List<BufferedImage> result = new ArrayList<>();
 			for (File item : files) {
-				result.add(ImageIO.read(new FileInputStream(item)));
+				result.add(ImageCompressUtil.compressImage(item, scale));
 			}
 			return result;
 		} catch (Exception e) {
